@@ -134,6 +134,13 @@
 		});
 		const elements = document?.querySelectorAll('.resize-watch');
 		elements.forEach((el) => resizeObserver.observe(el));
+
+		return () => {
+			// Cleanup: disconnect observer to prevent memory leaks
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
+		};
 	});
 
 	const onClickNext = (e) => {

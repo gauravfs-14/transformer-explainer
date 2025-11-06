@@ -144,18 +144,38 @@
 
 	let hoveredIndex: number | null = null;
 
+	// Optimize: Compute derived data once per modelData change
 	$: data = $modelData?.probabilities || [];
-	$: tokenIds = data?.map((d) => d.tokenId);
-	$: logits = data?.map((d) => d.logit) || [];
-	$: scaledLogits = data?.map((d) => d.scaledLogit) || [];
+	
+	// Declare variables first
+	let tokenIds: number[] = [];
+	let logits: number[] = [];
+	let scaledLogits: number[] = [];
+	let topKLogits: number[] = [];
+	let topPProbabilities: number[] = [];
+	let cumulativeProbabilities: number[] = [];
+	let cutoffIndex: number | undefined = undefined;
 
-	// top-k
-	$: topKLogits = data?.map((d) => d.topKLogit) || [];
-
-	// top-p
-	$: topPProbabilities = data?.map((d) => d.topPProbability) || [];
-	$: cumulativeProbabilities = data?.map((d) => d.cumulativeProbability) || [];
-	$: cutoffIndex = data?.[0].cutoffIndex;
+	// Compute all derived arrays in one reactive block to avoid multiple recalculations
+	$: {
+		if (data.length > 0) {
+			tokenIds = data.map((d) => d.tokenId);
+			logits = data.map((d) => d.logit);
+			scaledLogits = data.map((d) => d.scaledLogit);
+			topKLogits = data.map((d) => d.topKLogit);
+			topPProbabilities = data.map((d) => d.topPProbability);
+			cumulativeProbabilities = data.map((d) => d.cumulativeProbability);
+			cutoffIndex = data[0].cutoffIndex;
+		} else {
+			tokenIds = [];
+			logits = [];
+			scaledLogits = [];
+			topKLogits = [];
+			topPProbabilities = [];
+			cumulativeProbabilities = [];
+			cutoffIndex = undefined;
+		}
+	}
 
 	let isHovered = false;
 

@@ -124,9 +124,10 @@ export const getTokenization = async (tokenizer: PreTrainedTokenizer, input: str
 };
 
 export const getData = async (token_ids: number[]) => {
+	let inputTensor: ort.Tensor | null = null;
 	try {
 		// Convert token_ids to tensor
-		const inputTensor = new ort.Tensor('int64', token_ids, [1, token_ids.length]);
+		inputTensor = new ort.Tensor('int64', token_ids, [1, token_ids.length]);
 
 		// Get the session from the store
 		const session = get(modelSession);
@@ -140,16 +141,16 @@ export const getData = async (token_ids: number[]) => {
 		// Run inference
 		const results = await session.run(feeds);
 
-		// Extract the logits
-		const logits = results['linear_output'].data;
+		// Extract the logits (copy data immediately before tensor disposal)
+		const logits = Array.from(results['linear_output'].data);
 
 		// Extract the dictionary values
 		const outputs = targetTensors.reduce(
 			(obj, key) => {
 				const out = results[key];
+				// Use Array.from instead of spread for better memory efficiency
 				const processedData = {
-					// ...out,
-					data: reshapeArray([...out.cpuData], out.dims)
+					data: reshapeArray(Array.from(out.cpuData), out.dims)
 				};
 				obj[key] = processedData;
 				return obj;
@@ -164,6 +165,11 @@ export const getData = async (token_ids: number[]) => {
 	} catch (error) {
 		console.error('Error during inference:', error.message);
 		throw error;
+	} finally {
+		// Dispose input tensor to free memory
+		if (inputTensor) {
+			inputTensor.dispose();
+		}
 	}
 };
 
@@ -193,13 +199,12 @@ function topKSampling(
 ): { probabilities: Probabilities; sampled: Probability } {
 	// Trim the list to a reasonable number that can be displayed on the screen
 	const max = 50;
-	const sortedLogits = Array.from(logits)
-		.map((logit, index) => ({
-			tokenId: index,
-			logit
-		}))
-		.sort((a, b) => b.logit - a.logit)
-		.slice(0, max);
+	// Optimize: Create array with indices, sort, then slice (more efficient than multiple operations)
+	const logitsWithIndices = new Array(logits.length);
+	for (let i = 0; i < logits.length; i++) {
+		logitsWithIndices[i] = { tokenId: i, logit: logits[i] };
+	}
+	const sortedLogits = logitsWithIndices.sort((a, b) => b.logit - a.logit).slice(0, max);
 
 	// Temperature Scaling
 	const scaledLogits = sortedLogits.map((item) => ({
@@ -239,13 +244,12 @@ function topPSampling(
 ): { probabilities: Probabilities; sampled: Probability } {
 	// Trim the list to a reasonable number that can be displayed on the screen
 	const max = 50;
-	const sortedLogits = Array.from(logits)
-		.map((logit, index) => ({
-			tokenId: index,
-			logit
-		}))
-		.sort((a, b) => b.logit - a.logit)
-		.slice(0, max);
+	// Optimize: Create array with indices, sort, then slice (more efficient than multiple operations)
+	const logitsWithIndices = new Array(logits.length);
+	for (let i = 0; i < logits.length; i++) {
+		logitsWithIndices[i] = { tokenId: i, logit: logits[i] };
+	}
+	const sortedLogits = logitsWithIndices.sort((a, b) => b.logit - a.logit).slice(0, max);
 
 	// Temperature Scaling
 	const scaledLogits = sortedLogits.map((item) => ({
@@ -256,12 +260,13 @@ function topPSampling(
 	// Softmax Normalization
 	const { expLogits, probabilities } = softmax(scaledLogits.map((item) => item.scaledLogit));
 
-	// Compute cumulative probabilities
-	const cumulativeProbabilities: number[] = [];
-	probabilities.reduce((acc, prob, idx) => {
-		cumulativeProbabilities[idx] = acc + prob;
-		return cumulativeProbabilities[idx];
-	}, 0);
+	// Compute cumulative probabilities (optimized: pre-allocate array)
+	const cumulativeProbabilities: number[] = new Array(probabilities.length);
+	let cumulative = 0;
+	for (let i = 0; i < probabilities.length; i++) {
+		cumulative += probabilities[i];
+		cumulativeProbabilities[i] = cumulative;
+	}
 
 	let cutoffIndex = cumulativeProbabilities.findIndex((cumProb) => cumProb >= p);
 	cutoffIndex = cutoffIndex === -1 ? cumulativeProbabilities.length - 1 : cutoffIndex;
@@ -290,10 +295,26 @@ function topPSampling(
 }
 
 function softmax(logits: number[]): { expLogits: number[]; probabilities: number[] } {
-	const maxLogit = Math.max(...logits);
-	const expLogits = logits.map((logit) => (logit === -Infinity ? 0 : Math.exp(logit - maxLogit)));
-	const sumExpLogits = expLogits.reduce((sum, val) => sum + val, 0);
-	const probabilities = expLogits.map((val) => val / sumExpLogits);
+	// Optimize: Find max in single pass
+	let maxLogit = -Infinity;
+	for (let i = 0; i < logits.length; i++) {
+		if (logits[i] > maxLogit) {
+			maxLogit = logits[i];
+		}
+	}
+
+	// Pre-allocate arrays for better performance
+	const expLogits = new Array(logits.length);
+	let sumExpLogits = 0;
+	for (let i = 0; i < logits.length; i++) {
+		expLogits[i] = logits[i] === -Infinity ? 0 : Math.exp(logits[i] - maxLogit);
+		sumExpLogits += expLogits[i];
+	}
+
+	const probabilities = new Array(logits.length);
+	for (let i = 0; i < logits.length; i++) {
+		probabilities[i] = expLogits[i] / sumExpLogits;
+	}
 
 	return { expLogits, probabilities };
 }

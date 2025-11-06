@@ -47,21 +47,30 @@
 	let appStartTime = Date.now();
 
 	// fetch model
-	onMount(async () => {
-		// Configure ONNX runtime (client-side only)
-		ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
-		ort.env.logLevel = 'error';
+	onMount(() => {
+		let unsubscribe: (() => void) | null = null;
 
-		const gpt2Tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
-		active = true;
+		(async () => {
+			// Configure ONNX runtime (client-side only)
+			ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
+			ort.env.logLevel = 'error';
 
-		const unsubscribe = subscribeInputs(gpt2Tokenizer);
+			const gpt2Tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
+			active = true;
 
-		if (!$isMobile) {
-			await fetchModel();
-		}
+			unsubscribe = subscribeInputs(gpt2Tokenizer);
 
-		return unsubscribe;
+			if (!$isMobile) {
+				await fetchModel();
+			}
+		})();
+
+		return () => {
+			// Cleanup subscriptions
+			if (unsubscribe) {
+				unsubscribe();
+			}
+		};
 	});
 
 	// Fetch model onnx
@@ -80,12 +89,17 @@
 		// Create a URL for the Blob
 		const url = URL.createObjectURL(blob);
 
-		// Create ONNX session using the Blob URL
-		const session = await ort.InferenceSession.create(url, {
-			// logSeverityLevel: 0
-		});
+		try {
+			// Create ONNX session using the Blob URL
+			const session = await ort.InferenceSession.create(url, {
+				// logSeverityLevel: 0
+			});
 
-		modelSession.set(session);
+			modelSession.set(session);
+		} finally {
+			// Revoke blob URL to free memory
+			URL.revokeObjectURL(url);
+		}
 
 		isFetchingModel.set(false);
 

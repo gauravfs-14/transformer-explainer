@@ -80,7 +80,14 @@
 		elements.forEach((el) => resizeObserver.observe(el));
 
 		return () => {
-			document.querySelector('.main-section').removeEventListener('click', handleOutsideClick);
+			// Cleanup: disconnect observer and remove event listener
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
+			const mainSection = document.querySelector('.main-section');
+			if (mainSection) {
+				mainSection.removeEventListener('click', handleOutsideClick);
+			}
 		};
 	});
 
