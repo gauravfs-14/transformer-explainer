@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { userId } from '~/store';
 
 	export let className: string | undefined;
 	export let disabled: boolean = false;
@@ -19,12 +18,6 @@
 
 	function handleMouseUp() {
 		endValue = valueText;
-		window.dataLayer?.push({
-			event: `slider-interaction-${className}`,
-			slider_start_value: startValue,
-			slider_end_value: endValue,
-			user_id: $userId
-		});
 	}
 </script>
 

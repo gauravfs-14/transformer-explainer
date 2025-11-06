@@ -19,8 +19,7 @@
 		attentionHeadIdx,
 		blockIdx,
 		temperature,
-		tokenIds,
-		userId
+		tokenIds
 	} from '~/store';
 	import LoadingDots from './common/LoadingDots.svelte';
 	import classNames from 'classnames';
@@ -65,22 +64,6 @@
 			textPages.find((page) => page.id === 'how-transformers-work')?.complete();
 
 			inputText.set(inputTextTemp);
-
-			window.dataLayer?.push({
-				event: 'generate-next-token',
-				attn_head_num: $attentionHeadIdx,
-				transformer_block_num: $blockIdx,
-				sampling_type: $sampling.type,
-				sampling_value: $sampling.value,
-				temperature_value: $temperature,
-				current_token_length: $tokenIds.length,
-				input_word_count: inputTextTemp
-					.trim()
-					.split(/\s+/)
-					.filter((word) => word.length > 0).length,
-				use_custom_input: useCustomInput,
-				user_id: $userId
-			});
 		}, 0);
 	};
 

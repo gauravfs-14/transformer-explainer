@@ -4,8 +4,7 @@
 		headGap,
 		attentionHeadIdx,
 		attentionHeadIdxTemp,
-		isOnAnimation,
-		userId
+		isOnAnimation
 	} from '~/store';
 	import { onMount } from 'svelte';
 	import { gsap, Power1 } from '~/utils/gsap';
@@ -277,12 +276,6 @@
 
 		$attentionHeadIdxTemp =
 			$attentionHeadIdxTemp < $modelMeta.attention_head_num - 1 ? $attentionHeadIdxTemp + 1 : 0;
-		window.dataLayer?.push({
-			event: `pagination-attention-head-next`,
-			page_num: $attentionHeadIdxTemp,
-			pagination_name: 'attention-head',
-			user_id: $userId
-		});
 	};
 
 	const onClickPrev = () => {
@@ -290,12 +283,6 @@
 
 		$attentionHeadIdxTemp =
 			$attentionHeadIdxTemp > 0 ? $attentionHeadIdxTemp - 1 : $modelMeta.attention_head_num - 1;
-		window.dataLayer?.push({
-			event: `pagination-attention-head-prev`,
-			page_num: $attentionHeadIdxTemp,
-			pagination_name: 'attention-head',
-			user_id: $userId
-		});
 	};
 </script>
 

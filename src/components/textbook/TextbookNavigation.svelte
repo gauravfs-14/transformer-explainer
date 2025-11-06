@@ -4,8 +4,7 @@
 		textbookCurrentPage,
 		textbookPreviousPage,
 		textbookCurrentPageId,
-		textbookPreviousPageId,
-		userId
+		textbookPreviousPageId
 	} from '~/store';
 	import type { TextbookPage } from '~/utils/textbookPages';
 
@@ -31,13 +30,6 @@
 		const newPageId = textPages[newPageIndex]?.id || '';
 		textbookCurrentPageId.set(newPageId);
 		textbookCurrentPage.set(newPageIndex);
-
-		window.dataLayer?.push({
-			event: `open-textbook`,
-			page_id: newPageId,
-			open_via: 'progress-bar',
-			user_id: $userId
-		});
 	}
 
 	function navigatePage(direction: 'prev' | 'next') {
@@ -53,13 +45,6 @@
 		const newPageId = textPages[newPageIndex]?.id || '';
 		textbookCurrentPageId.set(newPageId);
 		textbookCurrentPage.set(newPageIndex);
-
-		window.dataLayer?.push({
-			event: `open-textbook`,
-			page_id: newPageId,
-			open_via: 'nvigation-arrow',
-			user_id: $userId
-		});
 	}
 
 	function handleLeftClick(event: MouseEvent) {
@@ -124,13 +109,6 @@
 								textbookCurrentPageId.set(newPageId);
 								textbookCurrentPage.set(index);
 								showPageDropdown = false;
-
-								window.dataLayer?.push({
-									event: `open-textbook`,
-									page_id: newPageId,
-									open_via: 'dropdown',
-									user_id: $userId
-								});
 							}}
 						>
 							{index + 1}. {page.title}

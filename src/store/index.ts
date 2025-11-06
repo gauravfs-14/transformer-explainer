@@ -25,7 +25,7 @@ export const isTextbookOpen = writable<boolean>(true);
 // is transformer running?
 export const isModelRunning = writable(false);
 export const isFetchingModel = writable(true);
-export const isLoaded = writable(false);
+export const isLoaded = writable(false); // Start as false to show loading indicator
 
 export const inputTextExample = [
 	'Data visualization empowers users to',
@@ -110,9 +110,6 @@ export const weightPopover = writable();
 export const tooltip = writable();
 
 export const isMobile = readable(detectDevice());
-
-// User identification
-export const userId = writable<string | null>(null);
 
 function detectDevice() {
 	const userAgent = navigator.userAgent.toLowerCase();

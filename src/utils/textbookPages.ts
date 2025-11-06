@@ -5,8 +5,7 @@ import {
 	isBoundingBoxActive,
 	textbookCurrentPageId,
 	isExpandOrCollapseRunning,
-	isFetchingModel,
-	userId
+	isFetchingModel
 } from '~/store';
 import {
 	highlightElements,
@@ -66,13 +65,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.input-form .select-button', '.input-form .generate-button']);
-			if (get(textbookCurrentPageId) === 'how-transformers-work') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'how-transformers-work'
-				});
-			}
 		}
 	},
 	{
@@ -113,13 +105,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.step.embedding .title']);
-			if (get(textbookCurrentPageId) === 'embedding') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'embedding'
-				});
-			}
 		}
 	},
 	{
@@ -219,13 +204,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.transformer-bounding-title']);
-			if (get(textbookCurrentPageId) === 'blocks') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'blocks'
-				});
-			}
 		}
 	},
 	{
@@ -271,13 +249,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.step.qkv .qkv-column']);
-			if (get(textbookCurrentPageId) === 'qkv') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'qkv'
-				});
-			}
 		}
 	},
 
@@ -296,13 +267,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.multi-head .head-title']);
-			if (get(textbookCurrentPageId) === 'multi-head') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'multi-head'
-				});
-			}
 		}
 	},
 	{
@@ -320,13 +284,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.attention-matrix.attention-result']);
-			if (get(textbookCurrentPageId) === 'masked-self-attention') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'masked-self-attention'
-				});
-			}
 		}
 	},
 	{
@@ -352,13 +309,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.attention .column.out']);
-			if (get(textbookCurrentPageId) === 'output-concatenation') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'output-concatenation'
-				});
-			}
 		}
 	},
 	{
@@ -387,13 +337,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.column.final']);
-			if (get(textbookCurrentPageId) === 'output-logit') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'output-logit'
-				});
-			}
 		}
 	},
 	{
@@ -409,13 +352,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.step.softmax .title']);
-			if (get(textbookCurrentPageId) === 'output-probabilities') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'output-probabilities'
-				});
-			}
 		}
 	},
 	{
@@ -459,13 +395,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.temperature-input']);
-			if (get(textbookCurrentPageId) === 'temperature') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'temperature'
-				});
-			}
 		}
 	},
 	{
@@ -509,13 +438,6 @@ export const textPages: TextbookPage[] = [
 		},
 		complete: () => {
 			removeFingerFromElements(['.sampling-input']);
-			if (get(textbookCurrentPageId) === 'sampling') {
-				window.dataLayer?.push({
-					user_id: get(userId),
-					event: `textbook-complete`,
-					page_id: 'sampling'
-				});
-			}
 		}
 	},
 	{

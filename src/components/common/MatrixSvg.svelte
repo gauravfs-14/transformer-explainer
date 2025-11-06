@@ -214,29 +214,34 @@
 	// highlighting
 	let animationFrame;
 	$: {
-		cancelAnimationFrame(animationFrame);
-		animationFrame = requestAnimationFrame(() => {
-			d3.select(svgEl)
-				.selectAll(shape)
-				.attr('class', function (d) {
-					const rowIdx = d.rowIndex;
-					const colIdx = d.colIndex;
+		// Only run in browser (not during SSR)
+		if (typeof window !== 'undefined' && svgEl) {
+			if (animationFrame) {
+				cancelAnimationFrame(animationFrame);
+			}
+			animationFrame = requestAnimationFrame(() => {
+				d3.select(svgEl)
+					.selectAll(shape)
+					.attr('class', function (d) {
+						const rowIdx = d.rowIndex;
+						const colIdx = d.colIndex;
 
-					let classname;
+						let classname;
 
-					if (highlightRow !== undefined && highlightCol !== undefined) {
-						classname =
-							rowIdx === highlightRow && colIdx === highlightCol ? 'cell highlight' : 'cell dim';
-					} else if (highlightRow === undefined && highlightCol === undefined) {
-						classname = 'cell';
-					} else if (highlightRow !== undefined) {
-						classname = rowIdx === highlightRow ? 'cell highlight' : 'cell dim';
-					} else if (highlightCol !== undefined) {
-						classname = colIdx === highlightCol ? 'cell highlight' : 'cell dim';
-					}
-					return classname;
-				});
-		});
+						if (highlightRow !== undefined && highlightCol !== undefined) {
+							classname =
+								rowIdx === highlightRow && colIdx === highlightCol ? 'cell highlight' : 'cell dim';
+						} else if (highlightRow === undefined && highlightCol === undefined) {
+							classname = 'cell';
+						} else if (highlightRow !== undefined) {
+							classname = rowIdx === highlightRow ? 'cell highlight' : 'cell dim';
+						} else if (highlightCol !== undefined) {
+							classname = colIdx === highlightCol ? 'cell highlight' : 'cell dim';
+						}
+						return classname;
+					});
+			});
+		}
 	}
 
 	// tooltip

@@ -7,8 +7,7 @@
 		blockIdx,
 		isExpandOrCollapseRunning,
 		textbookCurrentPageId,
-		isTextbookOpen,
-		userId
+		isTextbookOpen
 	} from '~/store';
 	import classNames from 'classnames';
 	import { gsap, Flip } from '~/utils/gsap';
@@ -18,7 +17,6 @@
 	import HelpPopover from './common/HelpPopover.svelte';
 	import tailwindConfig from '../../tailwind.config';
 	import resolveConfig from 'tailwindcss/resolveConfig';
-	import { ga } from '~/utils/event';
 	import { Tooltip } from 'flowbite-svelte';
 	import { ZoomInOutline } from 'flowbite-svelte-icons';
 
@@ -105,25 +103,11 @@
 		});
 
 		startTime = performance.now();
-		window.dataLayer?.push({
-			event: 'visibility-show',
-			visible_name: 'embedding-expansion',
-			start_time: startTime,
-			user_id: $userId
-		});
 	};
 
 	const collapseEmbedding = async () => {
 		let endTime = performance.now();
 		let visibleDuration = endTime - startTime;
-
-		window.dataLayer?.push({
-			event: 'visibility-hide',
-			visible_name: 'embedding-expansion',
-			end_time: endTime,
-			visible_duration: visibleDuration,
-			user_id: $userId
-		});
 
 		containerState = Flip.getState('.embedding .token-column');
 		isEmbeddingExpanded = false;

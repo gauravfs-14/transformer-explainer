@@ -3,8 +3,7 @@
 		isTextbookOpen,
 		textbookCurrentPage,
 		textbookCurrentPageId,
-		textbookPreviousPage,
-		userId
+		textbookPreviousPage
 	} from '~/store';
 	import { textPages } from '~/utils/textbookPages';
 
@@ -21,13 +20,6 @@
 			textbookCurrentPage.set(pageIndex);
 			textbookCurrentPageId.set(id);
 		}
-
-		window.dataLayer?.push({
-			event: `open-textbook`,
-			page_id: id,
-			open_via: 'tooltip',
-			user_id: $userId
-		});
 	}
 </script>
 

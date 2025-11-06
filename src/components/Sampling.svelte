@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Radio } from 'flowbite-svelte';
-	import { sampling, userId } from '~/store';
+	import { sampling } from '~/store';
 	import HelpPopover from './common/HelpPopover.svelte';
 	import Slider from './common/Slider.svelte';
 	import TextbookTooltip from './common/TextbookTooltip.svelte';
@@ -51,11 +51,6 @@
 					}}
 					on:change={(e) => {
 						e.target.checked && sampling.set({ type: 'top-k', value: 5 });
-						window.dataLayer?.push({
-							event: 'sampling-selected',
-							sampling_type: 'top-k',
-							user_id: $userId
-						});
 					}}
 					checked={$sampling.type === 'top-k'}
 					{disabled}
@@ -72,11 +67,6 @@
 					}}
 					on:change={(e) => {
 						e.target.checked && sampling.set({ type: 'top-p', value: 0.5 });
-						window.dataLayer?.push({
-							event: 'sampling-selected',
-							sampling_type: 'top-p',
-							user_id: $userId
-						});
 					}}
 					{disabled}
 					color="purple">Top-p</Radio

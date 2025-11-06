@@ -18,8 +18,7 @@
 		isMobile,
 		isOnBlockTransition,
 		blockIdx,
-		isTextbookOpen,
-		userId
+		isTextbookOpen
 	} from '~/store';
 	import { PreTrainedTokenizer } from '@xenova/transformers';
 	import Sankey from '~/components/Sankey.svelte';
@@ -44,14 +43,15 @@
 	import QKV from '~/components/QKV.svelte';
 	import Textbook from '~/components/textbook/Textbook.svelte';
 
-	ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
-	ort.env.logLevel = 'error';
-
 	let active = false;
 	let appStartTime = Date.now();
 
 	// fetch model
 	onMount(async () => {
+		// Configure ONNX runtime (client-side only)
+		ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
+		ort.env.logLevel = 'error';
+
 		const gpt2Tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
 		active = true;
 
@@ -90,12 +90,6 @@
 		isFetchingModel.set(false);
 
 		const loadTime = Date.now() - appStartTime;
-		window.dataLayer?.push({
-			event: `model-loaded`,
-			use_cache: hasCache,
-			load_time_ms: loadTime,
-			user_id: $userId
-		});
 	};
 
 	// Subscribe inputs

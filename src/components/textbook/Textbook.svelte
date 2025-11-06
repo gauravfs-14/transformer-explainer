@@ -7,8 +7,7 @@
 		textbookPreviousPage,
 		isTextbookOpen,
 		expandedBlock,
-		textbookCurrentPageId,
-		userId
+		textbookCurrentPageId
 	} from '~/store';
 	import { textPages } from '~/utils/textbookPages';
 	import TextbookCard from './TextbookCard.svelte';
@@ -43,13 +42,6 @@
 			class="floating-btn h-14 w-14"
 			on:click={() => {
 				isTextbookOpen.set(true);
-
-				window.dataLayer?.push({
-					event: `open-textbook`,
-					page_id: $textbookCurrentPageId,
-					open_via: 'floating-button',
-					user_id: $userId
-				});
 			}}
 		>
 			<BookOpenSolid class="h-8 w-8" />

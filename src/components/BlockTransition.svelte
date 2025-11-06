@@ -10,8 +10,7 @@
 		isBoundingBoxActive,
 		expandedBlock,
 		weightPopover,
-		isOnAnimation,
-		userId
+		isOnAnimation
 	} from '~/store';
 	import { textPages } from '~/utils/textbookPages';
 	import TextbookTooltip from './common/TextbookTooltip.svelte';
@@ -142,26 +141,12 @@
 		textPages.find((page) => page.id === 'blocks')?.complete();
 
 		$blockIdxTemp = $blockIdxTemp < $modelMeta.layer_num - 1 ? $blockIdxTemp + 1 : 0;
-
-		window.dataLayer?.push({
-			event: `pagination-transformer-block-next`,
-			page_num: $blockIdxTemp,
-			pagination_name: 'transformer-block',
-			user_id: $userId
-		});
 	};
 	const onClickPrev = (e) => {
 		e.stopPropagation();
 		textPages.find((page) => page.id === 'blocks')?.complete();
 
 		$blockIdxTemp = $blockIdxTemp > 0 ? $blockIdxTemp - 1 : $modelMeta.layer_num - 1;
-
-		window.dataLayer?.push({
-			event: `pagination-transformer-block-prev`,
-			page_num: $blockIdxTemp,
-			pagination_name: 'transformer-block',
-			user_id: $userId
-		});
 	};
 </script>
 

@@ -12,13 +12,11 @@
 		sampling,
 		isExpandOrCollapseRunning,
 		isTextbookOpen,
-		textbookCurrentPageId,
-		userId
+		textbookCurrentPageId
 	} from '~/store';
 	import { expandedBlock, predictedToken, highlightedIndex, modelData } from '~/store';
 	import ProbabilityBars from './ProbabilityBars.svelte';
 	import Katex from '~/utils/Katex.svelte';
-	import { ga } from '~/utils/event';
 	import { EyeOutline, ZoomInOutline } from 'flowbite-svelte-icons';
 	import { fade } from 'svelte/transition';
 	import SoftmaxPopover from './Popovers/SoftmaxPopover.svelte';
@@ -111,25 +109,11 @@
 		});
 
 		startTime = performance.now();
-		window.dataLayer?.push({
-			event: 'visibility-show',
-			visible_name: 'prob-expansion',
-			start_time: startTime,
-			user_id: $userId
-		});
 	};
 
 	const collapseSoftmax = async () => {
 		let endTime = performance.now();
 		let visibleDuration = endTime - startTime;
-
-		window.dataLayer?.push({
-			event: 'visibility-hide',
-			visible_name: 'prob-expansion',
-			end_time: endTime,
-			visible_duration: visibleDuration,
-			user_id: $userId
-		});
 
 		showLogitPopover = false;
 

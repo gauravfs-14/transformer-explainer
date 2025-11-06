@@ -7,8 +7,7 @@
 		attentionHeadIdx,
 		hoveredMatrixCell,
 		blockIdx,
-		isExpandOrCollapseRunning,
-		userId
+		isExpandOrCollapseRunning
 	} from '~/store';
 	import classNames from 'classnames';
 	import Matrix from '~/components/common/Matrix.svelte';
@@ -21,7 +20,6 @@
 	import Katex from '~/utils/Katex.svelte';
 	import { Tooltip } from 'flowbite-svelte';
 	import { ATTENTION_OUT } from '~/constants/opacity';
-	import { ga } from '~/utils/event';
 	import { ZoomInOutline } from 'flowbite-svelte-icons';
 	import TextbookTooltip from '~/components/common/TextbookTooltip.svelte';
 	import { textPages } from '~/utils/textbookPages';
@@ -236,26 +234,12 @@
 		});
 
 		startTime = performance.now();
-		window.dataLayer?.push({
-			event: 'visibility-show',
-			visible_name: 'attention-expansion',
-			start_time: startTime,
-			user_id: $userId
-		});
 	};
 
 	const collapseAttention = () => {
 		removeAttentionPathHighlight();
 		let endTime = performance.now();
 		let visibleDuration = endTime - startTime;
-
-		window.dataLayer?.push({
-			event: 'visibility-hide',
-			visible_name: 'attention-expansion',
-			end_time: endTime,
-			visible_duration: visibleDuration,
-			user_id: $userId
-		});
 
 		isAttentionExpanded = false;
 		isExpandOrCollapseRunning.set(true);
