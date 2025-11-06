@@ -507,19 +507,6 @@
 		</ul>
 	</div>
 
-	<div class="article-section" data-click="article-video">
-		<h2>Video Tutorial</h2>
-		<div class="video-container">
-			<iframe
-				src="https://www.youtube.com/embed/ECR4oAwocjs"
-				frameborder="0"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				allowfullscreen
-			>
-			</iframe>
-		</div>
-	</div>
-
 	<div class="article-section" data-click="article-implementation">
 		<h2>How is Transformer Explainer Implemented?</h2>
 		<p>
@@ -553,6 +540,16 @@
 			<a href="https://poloclub.github.io/polochau/" target="_blank">Polo Chau</a>
 
 			at the Georgia Institute of Technology.
+		</p>
+	</div>
+
+	<div class="article-section" data-click="article-customization">
+		<h2>Customization</h2>
+		<p>
+			Customized at
+			<a href="https://ait-lab.vercel.app/" target="_blank">AIT Lab</a>
+			by
+			<a href="https://github.com/gauravfs-14" target="_blank">gauravfs-14</a>.
 		</p>
 	</div>
 </div>

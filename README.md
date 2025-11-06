@@ -1,13 +1,11 @@
 # Transformer Explainer: Interactive Learning of Text-Generative Models
 
-Transformer Explainer is an interactive visualization tool designed to help anyone learn how Transformer-based models like GPT work. It runs a live GPT-2 model right in your browser, allowing you to experiment with your own text and observe in real time how internal components and operations of the Transformer work together to predict the next tokens. Try Transformer Explainer at http://poloclub.github.io/transformer-explainer and watch a demo video on YouTube https://youtu.be/TFUc41G2ikY.<br/><br/>
+Transformer Explainer is an interactive visualization tool designed to help anyone learn how Transformer-based models like GPT work. It runs a live GPT-2 model right in your browser, allowing you to experiment with your own text and observe in real time how internal components and operations of the Transformer work together to predict the next tokens.<br/><br/>
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
-[![arxiv badge](https://img.shields.io/badge/arXiv-2408.04619-red)](https://arxiv.org/abs/2408.04619)
-
-<a href="https://youtu.be/TFUc41G2ikY" target="_blank"><img width="100%" src='https://github.com/user-attachments/assets/0a4d8888-6555-4df5-bc71-77f1299115c3'></a>
 
 ## Live Demo
-Try Transformer Explainer: http://poloclub.github.io/transformer-explainer
+
+Try Transformer Explainer: <https://gauravfs-14.github.io/transformer-explainer>
 
 ## Research Paper
 
@@ -25,13 +23,13 @@ _Poster, IEEE VIS 2024._
 #### Steps
 
 ```bash
-git clone https://github.com/poloclub/transformer-explainer.git
+git clone https://github.com/gauravfs-14/transformer-explainer.git
 cd transformer-explainer
 npm install
 npm run dev
 ```
 
-Then, on your web browser, access http://localhost:5173.
+Then, on your web browser, access <http://localhost:5173>.
 
 ## Credits
 
@@ -51,11 +49,11 @@ Transformer Explainer was created by <a href="https://aereeeee.github.io/" targe
 
 ## License
 
-The software is available under the [MIT License](https://github.com/poloclub/transformer-explainer/blob/main/LICENSE).
+The software is available under the [MIT License](https://github.com/gauravfs-14/transformer-explainer/blob/main/LICENSE).
 
 ## Contact
 
-If you have any questions, feel free to [open an issue](https://github.com/poloclub/transformer-explainer/issues/new/choose) or contact [Aeree Cho](https://aereeeee.github.io/) or any of the contributors listed above.
+If you have any questions, feel free to [open an issue](https://github.com/gauravfs-14/transformer-explainer/issues/new/choose).
 
 ## More AI explainers to check out
 
