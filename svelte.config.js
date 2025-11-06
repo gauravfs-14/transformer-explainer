@@ -21,7 +21,16 @@ const config = {
 		}),
 		prerender: {
 			// List the specific routes to prerender
-			entries: ['/' /* other routes if needed */]
+			entries: ['/' /* other routes if needed */],
+			handleHttpError: ({ path, referrer, message }) => {
+				// Ignore 404 errors for missing PDF files during prerender
+				if (path.includes('.pdf')) {
+					console.warn(`Skipping missing file: ${path}`);
+					return;
+				}
+				// Throw other errors
+				throw new Error(message);
+			}
 		},
 		alias: {
 			'~': './src'

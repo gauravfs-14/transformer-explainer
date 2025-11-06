@@ -14,20 +14,14 @@
 		<Alert color="blue" dismissable>
 			<div class="alert-content">
 				We collect anonymous data for research.
-				<a
+				<!-- <a
 					href="./consent-form.pdf"
 					class="font-semibold underline hover:text-blue-800 dark:hover:text-blue-900"
 					target="_blank"
 				>
 					Learn more
-				</a>
+				</a> -->
 			</div>
 		</Alert>
 	</div>
 {/if}
-
-<style lang="scss">
-	.alert-content {
-		// width: 30rem;
-	}
-</style>
